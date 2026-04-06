@@ -6,5 +6,11 @@ on:
     - cron: "0 3 * * *"
 
 jobs:
-  quickshell-git:
-    uses: ./.github/workflows/package-quickshell-git.yml
+  build:
+    strategy:
+      matrix:
+        package: [quickshell-git]
+      max-parallel: 1
+    uses: ./.github/workflows/builder.yml
+    with:
+      package_name: ${{ matrix.package }}

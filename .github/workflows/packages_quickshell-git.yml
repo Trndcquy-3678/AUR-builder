@@ -1,0 +1,11 @@
+name: Build quickshell-git
+
+on:
+  workflow_dispatch:
+  workflow_call:
+
+jobs:
+  build:
+    uses: ./.github/workflows/builder.yml
+    with:
+      package_name: quickshell-git
