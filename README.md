@@ -1,7 +1,15 @@
 # AUR-builder
 this is a AUR build repo which relying on GH action
 > [!WARNING]
-> this is an experimental project, use it as your own risk
+> This repository is just a showcase / experimental project.
+> - It is not intended for production use
+> - Builds and workflows are for demonstration purposes only
+> - Some packages may be unofficial or for testing
+> - If you are looking for stable or official releases, please refer to the original upstream projects or AUR.
+
+---
+
+
 ## Packages on this repo
 - `quickshell-git`
   - status: [![Build quickshell-git](https://github.com/Trndcquy-3678/AUR-builder/actions/workflows/packages_quickshell-git.yml/badge.svg?branch=main)](https://github.com/Trndcquy-3678/AUR-builder/actions/workflows/packages_quickshell-git.yml)
