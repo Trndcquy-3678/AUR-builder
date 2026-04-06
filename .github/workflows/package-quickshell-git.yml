@@ -1,0 +1,23 @@
+name: Build quickshell-git
+
+on:
+  workflow_call:
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    container:
+      image: archlinux:latest
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Build package
+        run: bash scripts/build.sh quickshell-git
+
+      - name: Upload artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: quickshell-git
+          path: /output/

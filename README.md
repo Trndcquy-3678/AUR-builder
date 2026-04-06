@@ -6,17 +6,30 @@ This is an AUR build repository relying on GitHub Actions.
 
 ## Packages on this repo
 - `quickshell-git`
-  - status: [![Build status](https://github.com/Trndcquy-3678/AUR-builder/actions/workflows/quickshell-git-builder.yml/badge.svg?branch=main)](https://github.com/Trndcquy-3678/AUR-builder/actions/workflows/quickshell-git-builder.yml)
+  - status: [![Build status](https://github.com/Trndcquy-3678/AUR-builder/actions/workflows/main.yml/badge.svg?branch=main)](https://github.com/Trndcquy-3678/AUR-builder/actions/workflows/main.yml)
 
-## How it works
-This project uses a GitHub Actions workflow to:
-1.  Setup a clean Arch Linux environment.
-2.  Install `yay-bin` for AUR access.
-3.  Build packages specified in the build matrix.
-4.  Upload the built `.pkg.tar.zst` files as artifacts.
+## Package Builder Workflow
+The build process is automated via GitHub Actions and follows these steps:
 
-## How to add packages
-To add a new package to the automatic build list, edit `.github/workflows/quickshell-git-builder.yml` and add the package name to the `matrix.package` list.
+1.  **Trigger**: The workflow is triggered manually via `workflow_dispatch` or automatically on a daily schedule.
+2.  **Orchestration (`main.yml`)**: The main launcher calls specialized package workflows for each target.
+3.  **Compilation (`package-<name>.yml`)**: Each package workflow runs in a fresh Arch Linux container.
+4.  **Build Execution (`scripts/build.sh`)**:
+    - Updates system and installs `base-devel`, `git`, and `sudo`.
+    - Creates a non-root `builder` user for secure compilation.
+    - Installs `yay-bin` from the AUR.
+    - Compiles the target package and its dependencies.
+5.  **Artifact Collection**: The resulting `.pkg.tar.zst` files are collected and uploaded as GitHub Action artifacts.
+
+## How to add a new package
+To add a new package to this repository:
+1.  **Create a workflow**: Copy `.github/workflows/package-quickshell-git.yml` to `.github/workflows/package-<name>.yml` and update the package name.
+2.  **Register in Launcher**: Add a new job to `.github/workflows/main.yml` that uses your new workflow:
+    ```yaml
+    jobs:
+      my-new-package:
+        uses: ./.github/workflows/package-my-new-package.yml
+    ```
 
 ## FAQ
 ### Q: why?
