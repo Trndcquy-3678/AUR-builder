@@ -1,5 +1,10 @@
+name: Build quickshell-git
+
 on:
   workflow_dispatch:
+  schedule:
+    - cron: "0 3 * * *"  # daily, because chaos needs maintenance
+
 jobs:
   build:
     runs-on: ubuntu-latest
@@ -15,18 +20,24 @@ jobs:
           useradd -m builder
           echo "builder ALL=(ALL) NOPASSWD: ALL" >> /etc/sudoers
 
-      - name: Build quickshell-git
+      - name: Install yay
         run: |
           su - builder -c '
-            git clone https://aur.archlinux.org/quickshell-git.git
-            cd quickshell-git
-            makepkg -s --noconfirm
+            git clone https://aur.archlinux.org/yay.git
+            cd yay
+            makepkg -si --noconfirm
           '
 
-      - name: Collect artifacts
+      - name: Build quickshell-git (with deps)
+        run: |
+          su - builder -c '
+            yay -S --noconfirm quickshell-git
+          '
+
+      - name: Collect built packages
         run: |
           mkdir -p /output
-          find /home/builder/quickshell-git -name "*.pkg.tar.zst" -exec cp {} /output/ \;
+          find /home/builder/.cache/yay/ -name "*.pkg.tar.zst" -exec cp {} /output/ \;
 
       - name: Upload artifact
         uses: actions/upload-artifact@v4
